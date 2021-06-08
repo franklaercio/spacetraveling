@@ -78,7 +78,13 @@ export default function Post({ post }: PostProps) {
             <div className={styles.infoContainer}>
               <div>
                 <FiCalendar />
-                <time>{post.first_publication_date}</time>
+                <time>
+                  {format(
+                    new Date(post.first_publication_date),
+                    'dd MMM yyyy',{
+                      locale: ptBR,
+                  })}
+                </time>
               </div>
               <div>
                 <FiUser /> 
@@ -109,7 +115,7 @@ export default function Post({ post }: PostProps) {
   );
 }
 
-export const getStaticPaths = async () => {
+export const getStaticPaths: GetStaticPaths = async () => {
   const prismic = getPrismicClient();
   const posts = await prismic.query(
     [Prismic.Predicates.at('document.type', 'p1')],
@@ -142,13 +148,7 @@ export const getStaticProps : GetStaticProps = async ({ params }) => {
 
   const post = {
     uid: response.uid,
-    first_publication_date: 
-      format(
-        new Date(response.first_publication_date),
-        'dd MMM yyyy',{
-          locale: ptBR,
-        }
-    ),
+    first_publication_date: response.first_publication_date,
     data: {
       title: response.data.title,
       subtitle: response.data.subtitle,
