@@ -40,9 +40,28 @@ $ git clone https://github.com/franklaercio/spacetraveling
 # Access the project folder in the terminal/cmd
 $ cd spacetraveling
 
+# Create a new env local and adding your prismic url
+$ cp .env.example .env.local
+
 # Run the application
 $ yarn dev
 ```
+
+## :books: Prismic Config
+
+1. Create a new account if you don't have it.
+2. Create a new repository in Prismic.
+3. Create a new custom type in this model:
+- API ID: type UID.
+- TITLE: type Key Text.
+- SUBTITLE: type Key Text.
+- AUTHOR: type Key Text.
+- BANNER: type Image.
+- CONTENT: type Group.
+   - In group adding the follow items bellow:
+   - HEADING: type Key Text.
+   - BODY: type Rich Text.
+4. Publish news posts using your custom type.
 
 ## :man_technologist: Authors
 
