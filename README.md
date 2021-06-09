@@ -47,7 +47,7 @@ $ cp .env.example .env.local
 $ yarn dev
 ```
 
-## :books: Prismic Config
+## :books: Prismic Configuration
 
 1. Create a new account if you don't have it.
 2. Create a new repository in Prismic.
