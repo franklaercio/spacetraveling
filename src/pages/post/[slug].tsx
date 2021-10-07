@@ -1,20 +1,18 @@
 import { GetStaticPaths, GetStaticProps } from 'next';
 import Head from 'next/head';
-
 import Prismic from '@prismicio/client';
 import { getPrismicClient } from '../../services/prismic';
-
-import commonStyles from '../../styles/common.module.scss';
 import styles from './post.module.scss';
 import Header from '../../components/Header';
 import { FiCalendar, FiClock, FiUser } from 'react-icons/fi';
 import { RichText } from 'prismic-dom';
-
 import { format } from 'date-fns';
 import ptBR from 'date-fns/locale/pt-BR';
 import { useRouter } from 'next/router';
+import Comments from '../../components/Comments';
 
 interface Post {
+  uid: string;
   first_publication_date: string | null;
   data: {
     title: string;
@@ -64,36 +62,38 @@ export default function Post({ post }: PostProps) {
         <title>{post.data.title} | Spacetraveling</title>
       </Head>
 
-      <Header/> 
+      <Header />
 
-      <div className={styles.banner} >
-        <img src={post.data.banner.url} alt={post.data.title} />  
-      </div>  
+      <div className={styles.banner}>
+        <img src={post.data.banner.url} alt={post.data.title} />
+      </div>
 
       <main className={styles.container}>
         <article className={styles.post}>
           <div className={styles.postContent}>
             <h1>{post.data.title}</h1>
-            
+
             <div className={styles.infoContainer}>
               <div>
                 <FiCalendar />
                 <time>
                   {format(
                     new Date(post.first_publication_date),
-                    'dd MMM yyyy',{
+                    'dd MMM yyyy',
+                    {
                       locale: ptBR,
-                  })}
+                    }
+                  )}
                 </time>
               </div>
               <div>
-                <FiUser /> 
+                <FiUser />
                 <span>{post.data.author}</span>
               </div>
               <div>
-                <FiClock /> 
+                <FiClock />
                 <span>{readTime} min</span>
-              </div> 
+              </div>
             </div>
 
             <div className={styles.content}>
@@ -107,9 +107,11 @@ export default function Post({ post }: PostProps) {
                   />
                 </div>
               ))}
-            </div>   
+            </div>
           </div>
         </article>
+
+        <Comments id={post.uid} />
       </main>
     </>
   );
@@ -139,7 +141,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
   };
 };
 
-export const getStaticProps : GetStaticProps = async ({ params }) => {
+export const getStaticProps: GetStaticProps = async ({ params }) => {
   const { slug } = params;
 
   const prismic = getPrismicClient();

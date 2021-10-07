@@ -34,15 +34,15 @@ interface HomeProps {
 
 export default function Home({ postsPagination }: HomeProps) {
   const [posts, setPosts] = useState<Post[]>(postsPagination.results);
-  const [nextPage, setNextPage] = useState(postsPagination.next_page)
+  const [nextPage, setNextPage] = useState(postsPagination.next_page);
 
   async function getMorePosts() {
     const newPosts = await fetch(`${nextPage}`).then(response =>
       response.json()
     );
 
-    setNextPage(newPosts.next_page)
-    setPosts([...posts, ...newPosts.results])
+    setNextPage(newPosts.next_page);
+    setPosts([...posts, ...newPosts.results]);
   }
 
   return (
@@ -51,9 +51,9 @@ export default function Home({ postsPagination }: HomeProps) {
         <title>Posts | Spacetraveling</title>
       </Head>
 
-      <Header />   
+      <Header />
 
-      <main className={styles.container}>     
+      <main className={styles.container}>
         <div className={styles.posts}>
           {posts.map(post => (
             <Link href={`/post/${post.uid}`} key={post.uid}>
@@ -64,18 +64,20 @@ export default function Home({ postsPagination }: HomeProps) {
                   <div>
                     <FiCalendar />
                     <time>
-                    {format(
-                      new Date(post.first_publication_date),
-                      'dd MMM yyyy',{
-                        locale: ptBR,
-                    })}
+                      {format(
+                        new Date(post.first_publication_date),
+                        'dd MMM yyyy',
+                        {
+                          locale: ptBR,
+                        }
+                      )}
                     </time>
                   </div>
                   <div>
                     <FiUser />
                     <span>{post.data.author}</span>
                   </div>
-                </div>  
+                </div>
               </a>
             </Link>
           ))}
@@ -98,12 +100,13 @@ export default function Home({ postsPagination }: HomeProps) {
 export const getStaticProps: GetStaticProps = async () => {
   const prismic = getPrismicClient();
 
-  const postsResponse = await prismic.query([
-    Prismic.predicates.at('document.type', 'p1')
-  ], {
-    fetch: ['p1.title', 'p1.subtitle', 'p1.author', 'p1.content'],
-    pageSize: 2,
-  });
+  const postsResponse = await prismic.query(
+    [Prismic.predicates.at('document.type', 'p1')],
+    {
+      fetch: ['p1.uid', 'p1.title', 'p1.subtitle', 'p1.author', 'p1.content'],
+      pageSize: 2,
+    }
+  );
 
   const posts = postsResponse.results.map(post => {
     return {
@@ -114,7 +117,7 @@ export const getStaticProps: GetStaticProps = async () => {
         author: post.data.author,
       },
       first_publication_date: post.first_publication_date,
-    }
+    };
   });
 
   return {
@@ -125,5 +128,5 @@ export const getStaticProps: GetStaticProps = async () => {
       },
     },
     revalidate: 60 * 60 * 24,
-  }
+  };
 };
