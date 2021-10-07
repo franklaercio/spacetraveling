@@ -1,0 +1,16 @@
+.previewButton {
+  background-color: var(--heading-color);
+  color: var(--background-color);
+  width: 100%;
+  height: 3.625rem;
+  margin-top: 8.8rem;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 22px;
+  border-radius: 0.25rem;
+  border: 0;
+  transition: filter 0.2s;
+  &:hover {
+    filter: brightness(0.7);
+  }
+}
